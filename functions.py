@@ -26,6 +26,5 @@ class Exp(Function):
         return gx
 
 
-
 def exp(x):
     return Exp()(x)

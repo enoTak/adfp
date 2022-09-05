@@ -5,7 +5,7 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from numeric_ad.core_simple import Variable
-from numeric_ad.functions import square
+from numeric_ad.functions import exp, square
 from numeric_ad.binary_operators import add
 
 
@@ -46,3 +46,20 @@ class ClearGradTest(unittest.TestCase):
         actual = x.grad
         expected = np.array(3.0)
         self.assertEqual(actual, expected)
+
+
+
+class GenerationTest(unittest.TestCase):
+    def test_generation(self):
+        x = Variable(np.array(2.0))
+        a = square(x)
+        y = add(square(a), square(a))
+        y.backward()
+        
+        actual_val = y.data
+        expected_val = np.array(32.0)
+        self.assertEqual(actual_val, expected_val)
+
+        actual_grad = x.grad
+        expected_grad = np.array(64.0)
+        self.assertEqual(actual_grad, expected_grad)

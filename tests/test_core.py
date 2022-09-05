@@ -63,3 +63,10 @@ class GenerationTest(unittest.TestCase):
         actual_grad = x.grad
         expected_grad = np.array(64.0)
         self.assertEqual(actual_grad, expected_grad)
+
+
+class MemoryAllocTest(unittest.TestCase):
+    def test_memory_alloc(self):
+        for i in range(5):
+            x = Variable(np.random.randn(10000))
+            y = square(square(square(x)))

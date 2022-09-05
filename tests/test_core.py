@@ -65,7 +65,7 @@ class GenerationTest(unittest.TestCase):
         self.assertEqual(actual_grad, expected_grad)
 
 
-class ConfigTest(unittest.TestCase):
+class NoGradContextTest(unittest.TestCase):
     def test_config(self):
         with no_grad():
             x = Variable(np.ones((100, 100, 100)))

@@ -66,7 +66,7 @@ class GenerationTest(unittest.TestCase):
 
 
 class NoGradContextTest(unittest.TestCase):
-    def test_config(self):
+    def test_no_grad(self):
         with no_grad():
             x = Variable(np.ones((100, 100, 100)))
             y = square(square(square(x)))

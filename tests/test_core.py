@@ -4,7 +4,7 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from numeric_ad.core_simple import Variable
+from numeric_ad.core_simple import Variable, no_grad
 from numeric_ad.functions import exp, square
 from numeric_ad.binary_operators import add
 
@@ -65,8 +65,10 @@ class GenerationTest(unittest.TestCase):
         self.assertEqual(actual_grad, expected_grad)
 
 
-class MemoryAllocTest(unittest.TestCase):
-    def test_memory_alloc(self):
-        for i in range(5):
-            x = Variable(np.random.randn(10000))
+class ConfigTest(unittest.TestCase):
+    def test_config(self):
+        with no_grad():
+            x = Variable(np.ones((100, 100, 100)))
             y = square(square(square(x)))
+            flg = True
+        self.assertTrue(flg)

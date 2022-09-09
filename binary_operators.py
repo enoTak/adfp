@@ -1,4 +1,4 @@
-from numeric_ad.core_simple import Function
+from numeric_ad.core_simple import Function, Variable, as_array
 
 
 class Add(Function):
@@ -11,6 +11,7 @@ class Add(Function):
         
 
 def add(x0, x1):
+    x1 = as_array(x1)
     return Add()(x0, x1)
 
 
@@ -25,4 +26,11 @@ class Mul(Function):
 
 
 def mul(x0, x1):
+    x1 = as_array(x1)
     return Mul()(x0, x1)
+
+
+Variable.__add__ = add
+Variable.__radd__ = add
+Variable.__mul__ = mul
+Variable.__rmul__ = mul

@@ -4,6 +4,9 @@ from numeric_ad.utils import Config
 
 
 class Variable:
+    #---- the setting to be prior to binary operation of numpy.array ----
+    __array__priority__ = 200
+
     def __init__(self, data, name=None):
         if data is not None:
             if not isinstance(data, np.ndarray):
@@ -83,6 +86,8 @@ class Variable:
 
 class Function:
     def __call__(self, *inputs):
+        inputs = [as_variable(x) for x in inputs]
+
         xs = [x.data for x in inputs]
         ys = self.forward(*xs)
         if not isinstance(ys, tuple):
@@ -109,6 +114,12 @@ def as_array(x):
     if np.isscalar(x):
         return np.array(x)
     return x
+
+
+def as_variable(obj):
+    if isinstance(obj, Variable):
+        return obj
+    return Variable(obj)
 
 
 def numerical_diff(f, x, eps=1e-4):

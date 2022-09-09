@@ -5,8 +5,8 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from numeric_ad.core_simple import Variable
-from numeric_ad.functions import exp, square
-from numeric_ad.binary_operators import add
+from numeric_ad.functions import square
+from numeric_ad.arithmetic_operator import add
 
 
 class CompositeTest(unittest.TestCase):
@@ -45,7 +45,7 @@ class CompositeTest(unittest.TestCase):
         actual_grad = x.grad
         expected_grad = np.array(2.0)
         self.assertEqual(actual_grad, expected_grad)
-        
+
 
 class ClearGradTest(unittest.TestCase):
     def test_cleargrad(self):

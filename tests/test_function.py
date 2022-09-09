@@ -5,7 +5,7 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from numeric_ad.functions import *
-from numeric_ad.binary_operators import *
+from numeric_ad.arithmetic_operator import *
 from numeric_ad.core_simple import numerical_diff
 
 

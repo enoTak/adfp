@@ -4,9 +4,9 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from numeric_ad.core_simple import Variable, no_grad
-from numeric_ad.functions import exp, square
-from numeric_ad.binary_operators import add
+from numeric_ad.core_simple import Variable
+from numeric_ad.functions import square
+from numeric_ad.arithmetic_operator import add
 
 
 class CompositeTest(unittest.TestCase):
@@ -32,6 +32,19 @@ class CompositeTest(unittest.TestCase):
         actual_y = y.grad
         expected_y = np.array(8.0)
         self.assertEqual(actual_y, expected_y)
+
+    def test_multiple_use_of_same_variable(self):
+        x = Variable(np.array(3.0))
+        y = add(x, x)
+        y.backward()
+
+        actual_val = y.data
+        expected_val = np.array(6.0)
+        self.assertEqual(actual_val, expected_val)
+        
+        actual_grad = x.grad
+        expected_grad = np.array(2.0)
+        self.assertEqual(actual_grad, expected_grad)
 
 
 class ClearGradTest(unittest.TestCase):
@@ -63,12 +76,3 @@ class GenerationTest(unittest.TestCase):
         actual_grad = x.grad
         expected_grad = np.array(64.0)
         self.assertEqual(actual_grad, expected_grad)
-
-
-class NoGradContextTest(unittest.TestCase):
-    def test_no_grad(self):
-        with no_grad():
-            x = Variable(np.ones((100, 100, 100)))
-            y = square(square(square(x)))
-            flg = True
-        self.assertTrue(flg)

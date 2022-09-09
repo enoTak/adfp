@@ -4,7 +4,8 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from numeric_ad.core_simple import Variable, no_grad
+from numeric_ad.core_simple import Variable
+from numeric_ad.utils import no_grad
 from numeric_ad.functions import exp, square
 from numeric_ad.binary_operators import add
 

@@ -1,6 +1,6 @@
 import weakref
 import numpy as np
-from numeric_ad.utils import Config
+from autodiff.utils import Config
 
 
 class Variable:

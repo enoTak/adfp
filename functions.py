@@ -1,6 +1,6 @@
 
 import numpy as np
-from numeric_ad.core_simple import Variable, Function
+from autodiff.core_simple import Variable, Function
 
 
 class Square(Function):

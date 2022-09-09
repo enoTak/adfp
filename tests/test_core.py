@@ -33,6 +33,19 @@ class CompositeTest(unittest.TestCase):
         expected_y = np.array(8.0)
         self.assertEqual(actual_y, expected_y)
 
+    def test_multiple_use_of_same_variable(self):
+        x = Variable(np.array(3.0))
+        y = add(x, x)
+        y.backward()
+
+        actual_val = y.data
+        expected_val = np.array(6.0)
+        self.assertEqual(actual_val, expected_val)
+        
+        actual_grad = x.grad
+        expected_grad = np.array(2.0)
+        self.assertEqual(actual_grad, expected_grad)
+        
 
 class ClearGradTest(unittest.TestCase):
     def test_cleargrad(self):

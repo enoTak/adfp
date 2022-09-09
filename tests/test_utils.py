@@ -14,5 +14,4 @@ class NoGradContextTest(unittest.TestCase):
         with no_grad():
             x = Variable(np.ones((100, 100, 100)))
             y = square(square(square(x)))
-            flg = True
-        self.assertTrue(flg)
+        self.assertTrue(x.grad is None)

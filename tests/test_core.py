@@ -5,7 +5,6 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from numeric_ad.core_simple import Variable
-from numeric_ad.utils import no_grad
 from numeric_ad.functions import exp, square
 from numeric_ad.binary_operators import add
 
@@ -64,12 +63,3 @@ class GenerationTest(unittest.TestCase):
         actual_grad = x.grad
         expected_grad = np.array(64.0)
         self.assertEqual(actual_grad, expected_grad)
-
-
-class NoGradContextTest(unittest.TestCase):
-    def test_no_grad(self):
-        with no_grad():
-            x = Variable(np.ones((100, 100, 100)))
-            y = square(square(square(x)))
-            flg = True
-        self.assertTrue(flg)

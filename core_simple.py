@@ -5,7 +5,7 @@ from numeric_ad.utils import Config
 
 class Variable:
     #---- the setting to be prior to binary operation of numpy.array ----
-    __array__priority__ = 200
+    __array_priority__ = 200
 
     def __init__(self, data, name=None):
         if data is not None:

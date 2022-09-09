@@ -43,7 +43,7 @@ class AddTest(unittest.TestCase):
         x0 = np.array([3.0])
         x1 = Variable(np.array([2.0]))
         y = x0 + x1
-        actual = y[0].data
+        actual = y.data
         expected = np.array([5.0])
         self.assertEqual(actual, expected)
 

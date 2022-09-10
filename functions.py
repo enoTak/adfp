@@ -1,6 +1,6 @@
 
 import numpy as np
-from autodiff.core_simple import Variable, Function
+from autodiff.core_simple import Function
 
 
 class Square(Function):
@@ -28,3 +28,29 @@ class Exp(Function):
 
 def exp(x):
     return Exp()(x)
+
+
+class Sin(Function):
+    def forward(self, x):
+        return np.sin(x)
+    def backward(self, gy):
+        x = self.inputs[0].data
+        gx = np.cos(x) * gy
+        return gx
+
+
+def sin(x):
+    return Sin()(x)
+
+
+class Cos(Function):
+    def forward(self, x):
+        return np.cos(x)
+    def backward(self, gy):
+        x = self.inputs[0].data
+        gx = -np.sin(x) * gy
+        return gx
+
+
+def cos(x):
+    return Cos()(x)

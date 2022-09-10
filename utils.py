@@ -67,7 +67,6 @@ def get_dot_graph(output, verbose=True):
         if f not in seen_set:
             funcs.append(f)
             seen_set.add(f)
-            funcs.sort(key=lambda x: x.generation)
 
     add_func(output.creator)
     txt += _dot_var(output, verbose)

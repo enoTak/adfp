@@ -5,7 +5,7 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from pyautodiff.core_simple.variable import Variable
-from pyautodiff.functions import square
+from pyautodiff.analytic_function import square
 from pyautodiff.core_simple.arithmetic_operator import add
 
 

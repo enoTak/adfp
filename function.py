@@ -32,7 +32,6 @@ class Function:
         raise NotImplementedError()
 
 
-
 def as_array(x):
     if np.isscalar(x):
         return np.array(x)

@@ -1,4 +1,5 @@
-from pyautodiff.core_simple import Function, Variable, as_array
+from pyautodiff.core_simple.variable import Variable
+from pyautodiff.core_simple.function import Function, as_array
 
 
 class Add(Function):

@@ -5,8 +5,8 @@ sys.path.append("../.")
 import unittest
 import numpy as np
 from pyautodiff.functions import *
-from pyautodiff.arithmetic_operator import *
-from pyautodiff.core_simple import numerical_diff
+from pyautodiff.core_simple.arithmetic_operator import *
+from pyautodiff.core_simple.function import numerical_diff
 
 
 class SquareTest(unittest.TestCase):

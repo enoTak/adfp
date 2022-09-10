@@ -4,8 +4,8 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from pyautodiff.arithmetic_operator import *
-from pyautodiff import Variable
+from pyautodiff.core_simple.arithmetic_operator import *
+from pyautodiff.tests import Variable
 
 
 class AddTest(unittest.TestCase):

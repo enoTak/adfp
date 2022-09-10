@@ -1,6 +1,6 @@
 
 import numpy as np
-from pyautodiff.core_simple import Function
+from pyautodiff.core_simple.function import Function
 
 
 class Square(Function):

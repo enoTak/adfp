@@ -4,9 +4,9 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from autodiff.functions import *
-from autodiff.arithmetic_operator import *
-from autodiff.core_simple import numerical_diff
+from pyautodiff.analytic_function import *
+from pyautodiff.core_simple.arithmetic_operator import *
+from pyautodiff.function import numerical_diff
 
 
 class SquareTest(unittest.TestCase):
@@ -55,5 +55,55 @@ class ExpTest(unittest.TestCase):
         y = exp(x)
         y.backward()
         num_grad = numerical_diff(exp, x)
+        flg = np.allclose(x.grad, num_grad)
+        self.assertTrue(flg)
+
+
+class SinTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(np.pi/4.0))
+        y = sin(x)
+        actual = y.data
+        expected = np.array(np.sin(np.pi/4.0))
+        self.assertEqual(actual, expected)
+
+    def test_backward(self):
+        x = Variable(np.array(np.pi/4.0))
+        y = sin(x)
+        y.backward()
+        actual = x.grad
+        expected = np.array(np.cos(np.pi/4.0))
+        self.assertEqual(actual, expected)
+
+    def test_gradient_check(self):
+        x = Variable(np.random.rand(1))
+        y = sin(x)
+        y.backward()
+        num_grad = numerical_diff(sin, x)
+        flg = np.allclose(x.grad, num_grad)
+        self.assertTrue(flg)
+
+
+class CosTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(np.pi/4.0))
+        y = cos(x)
+        actual = y.data
+        expected = np.array(np.cos(np.pi/4.0))
+        self.assertEqual(actual, expected)
+
+    def test_backward(self):
+        x = Variable(np.array(np.pi/4.0))
+        y = cos(x)
+        y.backward()
+        actual = x.grad
+        expected = np.array(-np.sin(np.pi/4.0))
+        self.assertEqual(actual, expected)
+
+    def test_gradient_check(self):
+        x = Variable(np.random.rand(1))
+        y = cos(x)
+        y.backward()
+        num_grad = numerical_diff(cos, x)
         flg = np.allclose(x.grad, num_grad)
         self.assertTrue(flg)

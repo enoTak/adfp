@@ -67,7 +67,6 @@ def get_dot_graph(output, verbose=True):
         if f not in seen_set:
             funcs.append(f)
             seen_set.add(f)
-            funcs.sort(key=lambda x: x.generation)
 
     add_func(output.creator)
     txt += _dot_var(output, verbose)
@@ -111,3 +110,11 @@ def plot_dot_graph(output, verbose=True, to_file='graph.png'):
         return display.Image(filename=to_file)
     except:
         pass
+
+
+def numerical_diff(f, x, eps=1e-4):
+    x0 = Variable(as_array(x.data - eps))
+    x1 = Variable(as_array(x.data + eps))
+    y0 = f(x0)
+    y1 = f(x1)
+    return (y1.data - y0.data) / (2 * eps)

@@ -4,9 +4,9 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from autodiff.core_simple import Variable
-from autodiff.functions import square
-from autodiff.utils import no_grad
+from pyautodiff.core_simple import Variable
+from pyautodiff.functions import square
+from pyautodiff.utils import no_grad
 
 
 class NoGradContextTest(unittest.TestCase):

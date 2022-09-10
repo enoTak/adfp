@@ -4,9 +4,9 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from autodiff.core_simple import Variable
-from autodiff.functions import square
-from autodiff.arithmetic_operator import add
+from pyautodiff.core_simple import Variable
+from pyautodiff.functions import square
+from pyautodiff.arithmetic_operator import add
 
 
 class CompositeTest(unittest.TestCase):

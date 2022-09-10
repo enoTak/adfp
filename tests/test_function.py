@@ -4,9 +4,9 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from autodiff.functions import *
-from autodiff.arithmetic_operator import *
-from autodiff.core_simple import numerical_diff
+from pyautodiff.functions import *
+from pyautodiff.arithmetic_operator import *
+from pyautodiff.core_simple import numerical_diff
 
 
 class SquareTest(unittest.TestCase):

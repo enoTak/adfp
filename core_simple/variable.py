@@ -21,7 +21,7 @@ class Variable:
         
     def __ne__(self, other):
         return self.data != other.data
-        
+
     #---- utility functions ----#
     @property
     def shape(self):

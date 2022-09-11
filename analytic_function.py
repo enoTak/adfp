@@ -35,7 +35,7 @@ class Sin(Function):
         return np.sin(x)
     def backward(self, gy):
         x = self.inputs[0].data
-        gx = np.cos(x) * gy
+        gx = gy * np.cos(x)
         return gx
 
 
@@ -48,7 +48,7 @@ class Cos(Function):
         return np.cos(x)
     def backward(self, gy):
         x = self.inputs[0].data
-        gx = -np.sin(x) * gy
+        gx = gy * -np.sin(x)
         return gx
 
 

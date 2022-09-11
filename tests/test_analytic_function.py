@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from pyautodiff import Variable
 from pyautodiff.analytic_function import *
-from pyautodiff.function import numerical_diff, allclose
+from pyautodiff.calc_utils import numerical_diff, allclose
 
 
 class SquareTest(unittest.TestCase):

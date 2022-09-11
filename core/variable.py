@@ -13,7 +13,7 @@ class Variable:
 
         self.data = data
         self.name = name
-        self.grad = None
+        self._grad_inner = None
         self.creator = None
         self.generation = 0
 
@@ -36,6 +36,17 @@ class Variable:
     def dtype(self):
         return self.data.dtype
 
+    @property
+    def grad(self):
+        if self._grad_inner is None:
+            return Variable(np.zeros_like(self.data))
+        else:
+            return self._grad_inner
+
+    @property
+    def is_updated_grad(self):
+        return self._grad_inner is not None
+
     def __len__(self):
         return len(self.data)
 
@@ -51,8 +62,11 @@ class Variable:
         self.generation = func.generation + 1
 
     def backward(self, retain_grad=False, create_graph=False):
-        if self.grad is None:
-            self.grad = Variable(np.ones_like(self.data))
+        if self._grad_inner is None:
+            self._grad_inner = Variable(np.ones_like(self.data))
+
+        if self.creator is None:
+            return
 
         funcs = []
         seen_set = set()
@@ -75,20 +89,20 @@ class Variable:
                     gxs = (gxs,)
                     
                 for x, gx in zip(f.inputs, gxs):
-                    if x.grad is None:
-                        x.grad = gx
+                    if x._grad_inner is None:
+                        x._grad_inner = gx
                     else:
-                        x.grad = x.grad + gx
+                        x._grad_inner = x._grad_inner + gx
 
                     if x.creator is not None:
                         add_func(x.creator)
 
             if not retain_grad:
                 for y in f.outputs:
-                    y().grad = None
+                    y()._grad_inner = None
 
     def cleargrad(self):
-        self.grad = None
+        self._grad_inner = None
 
 
 def as_variable(obj):

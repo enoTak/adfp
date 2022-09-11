@@ -217,11 +217,8 @@ class DivTest(unittest.TestCase):
         expected = Variable(np.array(np.inf))
         self.assertEqual(actual, expected)
 
-        actual_grad0 = x0.grad
-        self.assertTrue(actual_grad0 is None)
-
-        actual_grad1 = x1.grad
-        self.assertTrue(actual_grad1 is None)
+        self.assertFalse(x0.is_updated_grad)
+        self.assertFalse(x1.is_updated_grad)
 
 
 class PowTest(unittest.TestCase):

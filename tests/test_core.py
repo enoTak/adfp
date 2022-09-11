@@ -87,10 +87,18 @@ class HigherOrderTest(unittest.TestCase):
             x = Variable(np.array(3.0))
             y = square(x)
             y.backward(create_graph=True)
-            print(f'{-1}: {x.grad}, {type(y)}')
+            actual = x.grad
+            expected = Variable(np.array(6.0))
+            self.assertEqual(actual, expected)
 
-            for i in range(2):
+            expected = [
+                Variable(np.array(2.0)),
+                Variable(np.array(0.0)),
+                Variable(np.array(0.0)),
+            ]
+            for i,e in zip(range(2, 5), expected):
                 gx = x.grad
                 x.cleargrad()
                 gx.backward(create_graph=True)
-                print(f'{i}: {x.grad}, {type(gx)}')
+                a = x.grad
+                self.assertEqual(a, e)

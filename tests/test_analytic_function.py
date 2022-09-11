@@ -88,7 +88,7 @@ class CosTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(np.pi/4.0))
         y = cos(x)
-        actual = y.data
+        actual = y
         expected = Variable(np.array(np.cos(np.pi/4.0)))
         self.assertEqual(actual, expected)
 
@@ -105,5 +105,30 @@ class CosTest(unittest.TestCase):
         y = cos(x)
         y.backward()
         num_grad = numerical_diff(cos, x)
+        flg = allclose(x.grad, num_grad)
+        self.assertTrue(flg)
+
+
+class TanhTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(1.0))
+        y = tanh(x)
+        actual = y
+        expected = Variable(np.array(np.tanh(1.0)))
+        self.assertEqual(actual, expected)
+
+    def test_backward(self):
+        x = Variable(np.array(1.0))
+        y = tanh(x)
+        y.backward()
+        actual = x.grad
+        expected = 1 - y * y
+        self.assertEqual(actual, expected)
+
+    def test_gradient_check(self):
+        x = Variable(np.random.rand(1))
+        y = tanh(x)
+        y.backward()
+        num_grad = numerical_diff(tanh, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)

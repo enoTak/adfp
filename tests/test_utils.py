@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from pyautodiff import Variable
 from pyautodiff.analytic_function import square
-from pyautodiff.utils import no_grad
+from pyautodiff.config import no_grad
 
 
 class NoGradContextTest(unittest.TestCase):

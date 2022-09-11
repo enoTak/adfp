@@ -65,13 +65,12 @@ class Variable:
         if self._grad_inner is None:
             self._grad_inner = Variable(np.ones_like(self.data))
 
-        if self.creator is None:
-            return
-
         funcs = []
         seen_set = set()
 
         def add_func(f):
+            if f is None:
+                return
             if f not in seen_set:
                 funcs.append(f)
                 seen_set.add(f)

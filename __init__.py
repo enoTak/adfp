@@ -8,7 +8,7 @@ else:
 
 from pyautodiff.function import Function
 from pyautodiff.calc_utils import numerical_diff, allclose
-from pyautodiff.analytic_function import square, exp
+from pyautodiff.analytic_function import square, exp, sin, cos, tanh
 from pyautodiff.config import using_config, no_grad
 from pyautodiff.utils import get_dot_graph, plot_dot_graph
 

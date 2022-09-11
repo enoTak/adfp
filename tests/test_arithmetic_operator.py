@@ -222,3 +222,24 @@ class DivTest(unittest.TestCase):
 
         actual_grad1 = x1.grad
         self.assertTrue(actual_grad1 is None)
+
+
+class PowTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(2.0))
+        c = 3.0
+        y = x ** c
+        actual = y
+        expected = Variable(np.array(8.0))
+        self.assertEqual(actual, expected)
+        
+    def test_backward(self):
+        x = Variable(np.array(2.0))
+        c = 3.0
+        y = x ** c
+        y.backward()
+
+        actual = x.grad
+        expected = Variable(np.array(12.0))
+        self.assertEqual(actual, expected)
+

@@ -1,4 +1,5 @@
 import numpy as np
+from pyautodiff.config import using_config
 
 
 class Variable:
@@ -12,7 +13,7 @@ class Variable:
 
         self.data = data
         self.name = name
-        self.grad = None
+        self._grad_inner = None
         self.creator = None
         self.generation = 0
 
@@ -35,6 +36,17 @@ class Variable:
     def dtype(self):
         return self.data.dtype
 
+    @property
+    def grad(self):
+        if self._grad_inner is None:
+            return Variable(np.zeros_like(self.data))
+        else:
+            return self._grad_inner
+
+    @property
+    def is_updated_grad(self):
+        return self._grad_inner is not None
+
     def __len__(self):
         return len(self.data)
 
@@ -49,14 +61,16 @@ class Variable:
         self.creator = func
         self.generation = func.generation + 1
 
-    def backward(self, retain_grad=False):
-        if self.grad is None:
-            self.grad = np.ones_like(self.data)
+    def backward(self, retain_grad=False, create_graph=False):
+        if self._grad_inner is None:
+            self._grad_inner = Variable(np.ones_like(self.data))
 
         funcs = []
         seen_set = set()
 
         def add_func(f):
+            if f is None:
+                return
             if f not in seen_set:
                 funcs.append(f)
                 seen_set.add(f)
@@ -67,25 +81,27 @@ class Variable:
         while funcs:
             f = funcs.pop()
             gys = [output().grad for output in f.outputs]
-            gxs = f.backward(*gys)
-            if not isinstance(gxs, tuple):
-                gxs = (gxs,)
-                
-            for x, gx in zip(f.inputs, gxs):
-                if x.grad is None:
-                    x.grad = gx
-                else:
-                    x.grad = x.grad + gx
 
-                if x.creator is not None:
-                    add_func(x.creator)
+            with using_config('enable_backprop', create_graph):
+                gxs = f.backward(*gys)
+                if not isinstance(gxs, tuple):
+                    gxs = (gxs,)
+                    
+                for x, gx in zip(f.inputs, gxs):
+                    if x._grad_inner is None:
+                        x._grad_inner = gx
+                    else:
+                        x._grad_inner = x._grad_inner + gx
+
+                    if x.creator is not None:
+                        add_func(x.creator)
 
             if not retain_grad:
                 for y in f.outputs:
-                    y().grad = None
+                    y()._grad_inner = None
 
     def cleargrad(self):
-        self.grad = None
+        self._grad_inner = None
 
 
 def as_variable(obj):

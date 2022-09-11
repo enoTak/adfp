@@ -4,7 +4,7 @@ sys.path.append("../.")
 
 import unittest
 import numpy as np
-from pyautodiff.core_simple.variable import Variable
+from pyautodiff import Variable
 from pyautodiff.analytic_function import square
 from pyautodiff.utils import no_grad
 

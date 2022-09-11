@@ -1,12 +1,13 @@
 import sys
+
+import pyautodiff
 sys.path.append("../.")
 
 
 import unittest
 import numpy as np
 from pyautodiff import Variable
-from pyautodiff.analytic_function import square
-# from pyautodiff.core_simple.arithmetic_operator import add
+from pyautodiff.analytic_function import square, sin, exp
 
 
 class CompositeTest(unittest.TestCase):
@@ -76,3 +77,20 @@ class GenerationTest(unittest.TestCase):
         actual_grad = x.grad
         expected_grad = Variable(np.array(64.0))
         self.assertEqual(actual_grad, expected_grad)
+
+
+class HigherOrderTest(unittest.TestCase):
+    def test_higher_order(self):
+        if pyautodiff.use_simple_core:
+            pass
+        else:
+            x = Variable(np.array(3.0))
+            y = square(x)
+            y.backward(create_graph=True)
+            print(f'{-1}: {x.grad}, {type(y)}')
+
+            for i in range(2):
+                gx = x.grad
+                x.cleargrad()
+                gx.backward(create_graph=True)
+                print(f'{i}: {x.grad}, {type(gx)}')

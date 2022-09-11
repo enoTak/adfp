@@ -1,5 +1,5 @@
 import numpy as np
-from pyautodiff.utils import using_config
+from pyautodiff.config import using_config
 
 
 class Variable:
@@ -23,9 +23,6 @@ class Variable:
     def __ne__(self, other):
         return self.data != other.data
 
-    def isfinite(self):
-        return self.data.isfinete
-
     #---- utility functions ----#
     @property
     def shape(self):
@@ -47,8 +44,6 @@ class Variable:
             return 'variable(None)'
         p = str(self.data).replace('\n', '\n' + ' ' * 9)
         return f'variable({p})'
-
-
 
     #---- main functions for autodifferentials----#
     def set_creator(self, func):
@@ -73,6 +68,7 @@ class Variable:
         while funcs:
             f = funcs.pop()
             gys = [output().grad for output in f.outputs]
+
             with using_config('enable_backprop', create_graph):
                 gxs = f.backward(*gys)
                 if not isinstance(gxs, tuple):
@@ -87,9 +83,9 @@ class Variable:
                     if x.creator is not None:
                         add_func(x.creator)
 
-                if not retain_grad:
-                    for y in f.outputs:
-                        y().grad = None
+            if not retain_grad:
+                for y in f.outputs:
+                    y().grad = None
 
     def cleargrad(self):
         self.grad = None

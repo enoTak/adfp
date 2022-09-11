@@ -2,9 +2,10 @@ import weakref
 import numpy as np
 
 
+from pyautodiff.utils import use_simple_core
 from pyautodiff.utils import Config
 
-if Config.use_simple_core:
+if use_simple_core:
     from pyautodiff.core_simple.variable import Variable, as_variable
 else:
     from pyautodiff.core.variable import Variable, as_variable

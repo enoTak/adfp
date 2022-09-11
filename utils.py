@@ -3,9 +3,10 @@ import contextlib
 import subprocess
 
 
+use_simple_core = False
+
 class Config:
     enable_backprop = True
-    use_simple_core = True
 
 
 @contextlib.contextmanager

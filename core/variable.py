@@ -1,4 +1,5 @@
 import numpy as np
+from pyautodiff.utils import using_config
 
 
 class Variable:
@@ -54,7 +55,7 @@ class Variable:
         self.creator = func
         self.generation = func.generation + 1
 
-    def backward(self, retain_grad=False):
+    def backward(self, retain_grad=False, create_graph=False):
         if self.grad is None:
             self.grad = Variable(np.ones_like(self.data))
 
@@ -72,22 +73,23 @@ class Variable:
         while funcs:
             f = funcs.pop()
             gys = [output().grad for output in f.outputs]
-            gxs = f.backward(*gys)
-            if not isinstance(gxs, tuple):
-                gxs = (gxs,)
-                
-            for x, gx in zip(f.inputs, gxs):
-                if x.grad is None:
-                    x.grad = gx
-                else:
-                    x.grad = x.grad + gx
+            with using_config('enable_backprop', create_graph):
+                gxs = f.backward(*gys)
+                if not isinstance(gxs, tuple):
+                    gxs = (gxs,)
+                    
+                for x, gx in zip(f.inputs, gxs):
+                    if x.grad is None:
+                        x.grad = gx
+                    else:
+                        x.grad = x.grad + gx
 
-                if x.creator is not None:
-                    add_func(x.creator)
+                    if x.creator is not None:
+                        add_func(x.creator)
 
-            if not retain_grad:
-                for y in f.outputs:
-                    y().grad = None
+                if not retain_grad:
+                    for y in f.outputs:
+                        y().grad = None
 
     def cleargrad(self):
         self.grad = None

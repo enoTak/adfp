@@ -1,5 +1,5 @@
-from pyautodiff.utils import Config
-if Config.use_simple_core:
+from pyautodiff.utils import use_simple_core
+if use_simple_core:
     from pyautodiff.core_simple.variable import Variable
     from pyautodiff.core_simple.arithmetic_operator import setup_variable   
 else:

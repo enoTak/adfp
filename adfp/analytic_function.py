@@ -1,6 +1,6 @@
 
 import numpy as np
-from pyautodiff.function import Function
+from adfp.function import Function
 
 
 class Square(Function):

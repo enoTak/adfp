@@ -1,5 +1,5 @@
-from pyautodiff.core.variable import Variable
-from pyautodiff.function import Function, as_array
+from adfp.core_simple.variable import Variable
+from adfp.function import Function, as_array
 
 
 class Add(Function):
@@ -53,7 +53,7 @@ class Mul(Function):
         return y
 
     def backward(self, gy):
-        x0, x1 = self.inputs
+        x0, x1 = self.inputs[0].data, self.inputs[1].data
         return gy * x1, gy * x0
 
 
@@ -68,9 +68,9 @@ class Div(Function):
         return y
 
     def backward(self, gy):
-        x0, x1 = self.inputs
+        x0, x1 = self.inputs[0].data, self.inputs[1].data
         gx0 = gy / x1
-        gx1 = gy * (-x0 / x1 ** 2)
+        gx1 = gy * (-x0 / x1**2)
         return gx0, gx1
         
 
@@ -93,9 +93,9 @@ class Pow(Function):
         return y
 
     def backward(self, gy):
-        x, = self.inputs
+        x = self.inputs[0].data
         c = self.c
-        gx = c * x ** (c - 1) * gy
+        gx = c * x ** (c -1) * gy
         return gx
 
 

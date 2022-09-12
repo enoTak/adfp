@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from pyautodiff import Variable
-from pyautodiff.analytic_function import square
-from pyautodiff.config import no_grad
+from adfp import Variable
+from adfp.analytic_function import square
+from adfp.config import no_grad
 
 
 class NoGradContextTest(unittest.TestCase):

@@ -1,11 +1,11 @@
 import numpy as np
 
-from pyautodiff.module_config import use_simple_core
+from adfp.module_config import use_simple_core
 if use_simple_core:
-    from pyautodiff.core_simple.variable import Variable, as_variable
+    from adfp.core_simple.variable import Variable, as_variable
 else:
-    from pyautodiff.core.variable import Variable, as_variable
-from pyautodiff.function import as_array
+    from adfp.core.variable import Variable, as_variable
+from adfp.function import as_array
 
 
 def numerical_diff(f, x, eps=1e-4):

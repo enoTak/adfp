@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from pyautodiff import Variable
-from pyautodiff.analytic_function import *
-from pyautodiff.calc_utils import numerical_diff, allclose
+from adfp import Variable
+from adfp.analytic_function import *
+from adfp.calc_utils import numerical_diff, allclose
 
 
 class SquareTest(unittest.TestCase):

@@ -1,5 +1,5 @@
 import numpy as np
-from pyautodiff.config import using_config
+from adfp.config import using_config
 
 
 class Variable:

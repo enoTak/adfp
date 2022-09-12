@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from adfp import Variable
-from adfp.analytic_function import square
-from adfp.config import no_grad
+from adfpy import Variable
+from adfpy.analytic_function import square
+from adfpy.config import no_grad
 
 
 class NoGradContextTest(unittest.TestCase):

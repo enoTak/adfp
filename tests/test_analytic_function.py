@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from adfp import Variable
-from adfp.analytic_function import *
-from adfp.calc_utils import numerical_diff, allclose
+from adfpy import Variable
+from adfpy.analytic_function import *
+from adfpy.calc_utils import numerical_diff, allclose
 
 
 class SquareTest(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from adfp import Variable
+from adfpy import Variable
 
 
 class AddTest(unittest.TestCase):

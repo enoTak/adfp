@@ -1,5 +1,5 @@
-from adfp.core_simple.variable import Variable
-from adfp.function import Function, as_array
+from adfpy.core_simple.variable import Variable
+from adfpy.function import Function, as_array
 
 
 class Add(Function):

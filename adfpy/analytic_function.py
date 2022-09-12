@@ -1,6 +1,6 @@
 
 import numpy as np
-from adfp.function import Function
+from adfpy.function import Function
 
 
 class Square(Function):

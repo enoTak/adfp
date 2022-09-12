@@ -1,11 +1,11 @@
 import numpy as np
 
-from adfp.module_config import use_simple_core
+from adfpy.module_config import use_simple_core
 if use_simple_core:
-    from adfp.core_simple.variable import Variable, as_variable
+    from adfpy.core_simple.variable import Variable, as_variable
 else:
-    from adfp.core.variable import Variable, as_variable
-from adfp.function import as_array
+    from adfpy.core.variable import Variable, as_variable
+from adfpy.function import as_array
 
 
 def numerical_diff(f, x, eps=1e-4):

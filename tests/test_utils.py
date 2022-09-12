@@ -1,12 +1,8 @@
-import sys
-sys.path.append("../.")
-
-
 import unittest
 import numpy as np
-from pyautodiff import Variable
-from pyautodiff.analytic_function import square
-from pyautodiff.config import no_grad
+from adfpy import Variable
+from adfpy.analytic_function import square
+from adfpy.config import no_grad
 
 
 class NoGradContextTest(unittest.TestCase):

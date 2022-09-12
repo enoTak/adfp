@@ -1,13 +1,9 @@
-import sys
-
-import pyautodiff
-sys.path.append("../.")
-
-
 import unittest
 import numpy as np
-from pyautodiff import Variable
-from pyautodiff.analytic_function import square, sin, exp
+
+from adfpy import Variable
+from adfpy.analytic_function import square, sin, exp
+from adfpy.module_config import use_simple_core
 
 
 class CompositeTest(unittest.TestCase):
@@ -81,7 +77,7 @@ class GenerationTest(unittest.TestCase):
 
 class HigherOrderTest(unittest.TestCase):
     def test_higher_order(self):
-        if pyautodiff.use_simple_core:
+        if use_simple_core:
             pass
         else:
             x = Variable(np.array(3.0))

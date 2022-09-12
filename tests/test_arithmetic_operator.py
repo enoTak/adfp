@@ -1,10 +1,6 @@
-import sys
-sys.path.append("../.")
-
-
 import unittest
 import numpy as np
-from pyautodiff import Variable
+from adfpy import Variable
 
 
 class AddTest(unittest.TestCase):

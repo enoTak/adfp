@@ -2,12 +2,12 @@ import weakref
 import numpy as np
 
 
-from pyautodiff.module_config import use_simple_core
+from adfpy.module_config import use_simple_core
 if use_simple_core:
-    from pyautodiff.core_simple.variable import Variable, as_variable
+    from adfpy.core_simple.variable import Variable, as_variable
 else:
-    from pyautodiff.core.variable import Variable, as_variable
-from pyautodiff.config import Config
+    from adfpy.core.variable import Variable, as_variable
+from adfpy.config import Config
 
 
 class Function:

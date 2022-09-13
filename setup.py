@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
@@ -22,8 +22,8 @@ setup(name='adfp',
       install_requires=['numpy'],
       author='Takumi Enomoto',
       author_email='eno.sleepy.zzz.zz.z@gmail.com',
-      url='',
-      packages=['adfp'],
+      url='https://github.com/enoTak/adfp',
+      packages=find_packages(exclude=['tests', 'sample_notebook']),
       description='auto differential framework',
       long_description=long_description,
       long_description_content_type='text/markdown',

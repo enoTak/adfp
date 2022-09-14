@@ -7,7 +7,7 @@ else:
     from adfp.core.arithmetic_operator import setup_variable   
 
 from adfp.function import Function
-from adfp.calc_utils import numerical_diff, allclose
+from adfp.calc_utils import numerical_diff, allclose, array_equal
 from adfp.analytic_function import square, exp, sin, cos, tanh
 from adfp.config import using_config, no_grad
 from adfp.utils import get_dot_graph, plot_dot_graph

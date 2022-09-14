@@ -18,3 +18,7 @@ def numerical_diff(f, x, eps=1e-4):
 
 def allclose(lhs, rhs):
     return np.allclose(lhs.data, rhs.data)
+
+
+def array_equal(lhs, rhs):
+    return np.array_equal(lhs.data, rhs.data)

@@ -21,7 +21,6 @@ class ReshapeTest(unittest.TestCase):
         expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
         self.assertTrue(array_equal(actual, expected))
 
-
     def test_reshape_of_instance_value(self):
         x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
         y = x.reshape((6,))
@@ -144,4 +143,116 @@ class TransposeTest(unittest.TestCase):
         z.backward(retain_grad=True)
         actual = x.grad
         expected = y
+        self.assertTrue(array_equal(actual, expected))
+
+
+class BroadcastToTest(unittest.TestCase):
+    def test_value(self):
+        x = Variable(np.array([1, 2, 3]))
+        y = F.broadcast_to(x, (2, 3))
+        actual = y
+        expected = Variable(np.array([[1, 2, 3], [1, 2, 3]]))
+        self.assertTrue(array_equal(actual, expected))
+
+        x = Variable(np.array([[1, 2, 3]]))
+        y = F.broadcast_to(x, (2, 3))
+        actual = y
+        expected = Variable(np.array([[1, 2, 3], [1, 2, 3]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad(self):
+        x = Variable(np.array([1, 2, 3]))
+        y = F.broadcast_to(x, (2, 3))
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([2, 2, 2]))
+        self.assertTrue(array_equal(actual, expected))
+
+        x = Variable(np.array([[1, 2, 3]]))
+        y = F.broadcast_to(x, (2, 3))
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([[2, 2, 2]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_shape_diff(self):
+        x = Variable(np.array([1, 2, 3]))
+        error_occured = False
+        try:
+            y = F.broadcast_to(x, (2, 4))
+        except ValueError:
+            error_occured = True
+        finally:
+            self.assertTrue(error_occured)
+            
+
+class SumToTest(unittest.TestCase):
+    def test_value(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum_to(x, (1, 3))
+        actual = y
+        expected = Variable(np.array([[5, 7, 9]]))
+        self.assertTrue(array_equal(actual, expected))
+
+        y = F.sum_to(x, (2, 1))
+        actual = y
+        expected = Variable(np.array([[6], [15]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum_to(x, (1, 3))
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
+        self.assertTrue(array_equal(actual, expected))
+
+        x.cleargrad()
+        y = F.sum_to(x, (2, 1))
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_shape_diff(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum_to(x, (5, 3))
+        actual = y
+        expected = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        self.assertTrue(array_equal(actual, expected))
+
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum_to(x, (5, 1))
+        actual = y
+        expected = Variable(np.array([[6], [15]]))
+        self.assertTrue(array_equal(actual, expected))
+
+
+class SumTest(unittest.TestCase):
+    def test_value(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum(x)
+        actual = y
+        expected = Variable(np.array(21))
+        self.assertTrue(array_equal(actual, expected))
+
+        x = Variable(np.array([1, 2, 3, 4, 5, 6]))
+        y = F.sum(x)
+        actual = y
+        expected = Variable(np.array(21))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum(x)
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
+        self.assertTrue(array_equal(actual, expected))
+
+        x = Variable(np.array([1, 2, 3, 4, 5, 6]))
+        y = F.sum(x)
+        y.backward(retain_grad=True)
+        actual = x.grad
+        expected = Variable(np.array([1, 1, 1, 1, 1, 1]))
         self.assertTrue(array_equal(actual, expected))

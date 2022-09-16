@@ -75,6 +75,9 @@ class Variable:
     def T(self):
         return adfp.matrix_functions.transpose(self)
 
+    def sum(self, axis=None, keepdims=False):
+        return adfp.matrix_functions.sum(self, axis, keepdims)
+
     #---- main functions for autodifferentials ----#
     def set_creator(self, func):
         self.creator = func

@@ -242,17 +242,36 @@ class SumTest(unittest.TestCase):
         expected = Variable(np.array(21))
         self.assertTrue(array_equal(actual, expected))
 
-    def test_grad(self):
+    def test_value_with_options(self):
         x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
-        y = F.sum(x)
+        y = F.sum(x, axis=0)
+        actual = y
+        expected = Variable(np.array([5, 7, 9]))
+        self.assertTrue(array_equal(actual, expected))
+
+        y = F.sum(x, keepdims=True)
+        actual = y
+        expected = Variable(np.array([[21]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad_with_option(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = F.sum(x, axis=0)
         y.backward(retain_grad=True)
         actual = x.grad
         expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
         self.assertTrue(array_equal(actual, expected))
 
         x = Variable(np.array([1, 2, 3, 4, 5, 6]))
-        y = F.sum(x)
+        y = F.sum(x, keepdims=True)
         y.backward(retain_grad=True)
         actual = x.grad
         expected = Variable(np.array([1, 1, 1, 1, 1, 1]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_sum_of_instance(self):
+        x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        y = x.sum()
+        actual = y
+        expected = Variable(np.array(21))
         self.assertTrue(array_equal(actual, expected))

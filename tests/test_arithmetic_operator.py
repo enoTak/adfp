@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 from adfp import Variable
+from adfp .calc_utils import array_equal
 
 
 class AddTest(unittest.TestCase):
@@ -57,6 +58,24 @@ class AddTest(unittest.TestCase):
         expected = np.array(5.0)
         self.assertEqual(actual, expected)
 
+    def test_broadcast(self):
+        x0 = Variable(np.array([1, 2, 3]))
+        x1 = Variable(np.array([10]))
+        y = x0 + x1
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([11, 12, 13]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x0.grad
+        expected = Variable(np.array([1, 1, 1]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x1.grad
+        expected = Variable(np.array([len(x0)]))
+        self.assertTrue(array_equal(actual, expected))
+
 
 class MulTest(unittest.TestCase):
     def test_forward(self):
@@ -112,6 +131,24 @@ class MulTest(unittest.TestCase):
         expected = Variable(np.array(6.0))
         self.assertEqual(actual, expected)
 
+    def test_broadcast(self):
+        x0 = Variable(np.array([1, 2, 3]))
+        x1 = Variable(np.array([10]))
+        y = x0 * x1
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([10, 20, 30]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x0.grad
+        expected = Variable(np.array([10, 10, 10]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x1.grad
+        expected = Variable(np.array([6]))
+        self.assertTrue(array_equal(actual, expected))
+
 
 class NegTest(unittest.TestCase):
     def test_forward(self):
@@ -166,6 +203,24 @@ class SubTest(unittest.TestCase):
         expected_1 = Variable(np.array(-1.0))
         self.assertEqual(actual_1, expected_1)
 
+    def test_broadcast(self):
+        x0 = Variable(np.array([1, 2, 3]))
+        x1 = Variable(np.array([10]))
+        y = x0 - x1
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([-9, -8, -7]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x0.grad
+        expected = Variable(np.array([1, 1, 1]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x1.grad
+        expected = Variable(np.array([-3]))
+        self.assertTrue(array_equal(actual, expected))
+
 
 class DivTest(unittest.TestCase):
     def test_forward(self):
@@ -216,6 +271,24 @@ class DivTest(unittest.TestCase):
         self.assertFalse(x0.is_updated_grad)
         self.assertFalse(x1.is_updated_grad)
 
+    def test_broadcast(self):
+        x0 = Variable(np.array([1, 2, 3]))
+        x1 = Variable(np.array([10]))
+        y = x0 / x1
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([0.1, 0.2, 0.3]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x0.grad
+        expected = Variable(np.array([0.1, 0.1, 0.1]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x1.grad
+        expected = Variable(np.array([-0.06]))
+        self.assertTrue(array_equal(actual, expected))
+
 
 class PowTest(unittest.TestCase):
     def test_forward(self):
@@ -235,4 +308,3 @@ class PowTest(unittest.TestCase):
         actual = x.grad
         expected = Variable(np.array(12.0))
         self.assertEqual(actual, expected)
-

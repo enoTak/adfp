@@ -1,5 +1,6 @@
 import numpy as np
 from adfp.config import using_config
+import adfp
 
 
 class Variable:
@@ -56,7 +57,31 @@ class Variable:
         p = str(self.data).replace('\n', '\n' + ' ' * 9)
         return f'variable({p})'
 
-    #---- main functions for autodifferentials----#
+    #---- matrix calculation ----#
+    def reshape(self, *shape):
+        if len(shape) == 1 and isinstance(shape[0], (tuple, list)):
+            shape = shape[0]
+        return adfp.functions.matrix_functions.reshape(self, shape)
+
+    def transpose(self, *axes):
+        if len(axes) == 0:
+            axes = None
+        elif len(axes) == 1:
+            if isinstance(axes[0], (tuple, list)) or axes[0] is None:
+                axes = axes[0]
+        return adfp.functions.matrix_functions.transpose(self, axes)
+
+    @property
+    def T(self):
+        return adfp.functions.matrix_functions.transpose(self)
+
+    def sum(self, axis=None, keepdims=False):
+        return adfp.functions.matrix_functions.sum(self, axis, keepdims)
+
+    def dot(self, Y):
+        return adfp.functions.matrix_functions.dot(self, Y)
+
+    #---- main functions for autodifferentials ----#
     def set_creator(self, func):
         self.creator = func
         self.generation = func.generation + 1

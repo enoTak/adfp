@@ -1,6 +1,10 @@
 import os
 import subprocess
 
+import numpy as np
+
+from adfp.core import Variable
+
 
 def _dot_var(v, verbose=False):
     dot_var = '{} [label="{}", color=orange, style=filled]\n'
@@ -94,3 +98,46 @@ def plot_dot_graph(output, verbose=True, to_file='graph.png'):
         return display.Image(filename=to_file)
     except:
         pass
+
+
+def numerical_grad(f, x, *args, **kwargs):
+    """Computes numerical gradient by finite differences.
+    Args:
+        f (callable): A function which gets `Variable`s and returns `Variable`s.
+        x (`ndarray` or `adfp.Variable`): A target `Variable` for computing
+            the gradient.
+        *args: If `f` needs variables except `x`, you can specify with this
+            argument.
+        **kwargs: If `f` needs keyword variables, you can specify with this
+            argument.
+    Returns:
+        `ndarray`: Gradient.
+    """
+    eps = 1e-4
+
+    x = x.data if isinstance(x, Variable) else x
+    grad = np.zeros_like(x)
+
+    it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+    while not it.finished:
+        idx = it.multi_index
+        tmp_val = x[idx].copy()
+
+        x[idx] = tmp_val + eps
+        y1 = f(x, *args, **kwargs)  # f(x+h)
+        if isinstance(y1, Variable):
+            y1 = y1.data
+        y1 = y1.copy()
+
+        x[idx] = tmp_val - eps
+        y2 = f(x, *args, **kwargs)  # f(x-h)
+        if isinstance(y2, Variable):
+            y2 = y2.data
+        y2 = y2.copy()
+
+        diff = (y1 - y2).sum()
+        grad[idx] = diff / (2 * eps)
+
+        x[idx] = tmp_val
+        it.iternext()
+    return grad

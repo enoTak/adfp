@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from adfp import Variable
-from adfp.analytic_function import square, sin, exp
+from adfp.functions.analytic_functions import square, sin, exp
 from adfp.module_config import use_simple_core
 
 

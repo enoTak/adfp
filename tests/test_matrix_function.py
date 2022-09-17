@@ -308,19 +308,16 @@ class MatMulTest(unittest.TestCase):
         expected = Variable(X.data.T.dot(np.ones_like(Z.data)))
         self.assertTrue(array_equal(actual, expected))
 
-    def test_value_vector(self):
+    def test_vector_error(self):
         x = Variable(np.array([1, 2, 3]))
         Y = Variable(np.array([[1, 2], [3, 4], [5, 6]]))
-        z = F.matmul(x, Y)
-        z.backward()
-
-        actual = z
-        expected = Variable(np.array([22, 28]))
-        self.assertTrue(array_equal(actual, expected))
-
-        actual = x.grad
-        expected = Variable(np.array([3, 7, 11]))
-        self.assertTrue(array_equal(actual, expected))
+        error_occured = False
+        try:
+            z = F.matmul(x, Y)
+        except ValueError:
+            error_occured = True
+        finally:
+            self.assertTrue(error_occured)
 
 
 class InnerProdTest(unittest.TestCase):
@@ -345,4 +342,51 @@ class InnerProdTest(unittest.TestCase):
 
         actual = w.grad
         expected = v
+        self.assertTrue(array_equal(actual, expected))
+
+
+class DotTest(unittest.TestCase):
+    def test_vector_vector(self):
+        v = Variable(np.array([1, 2, 3]))
+        w = Variable(np.array([2, 3, 4]))
+        y = F.dot(v, w)
+       
+        actual = y
+        expected = Variable(np.array(np.dot(v.data, w.data)))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_scalar_vactor(self):
+        v = Variable(np.array(2))
+        w = Variable(np.array([2, 3, 4]))
+        y = F.dot(v, w)
+       
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_scalar_vactor(self):
+        v = Variable(np.array(2))
+        w = Variable(np.array([2, 3, 4]))
+        y = F.dot(v, w)
+       
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_matrix_vactor(self):
+        v = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        w = Variable(np.array([1, 2, 3]))
+        y = F.dot(v, w)
+       
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_vector_matrix(self):
+        v = Variable(np.array([1, 2, 3]))
+        w = Variable(np.array([[1, 2], [3, 4], [5, 6]]))
+        y = F.dot(v, w)
+
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
         self.assertTrue(array_equal(actual, expected))

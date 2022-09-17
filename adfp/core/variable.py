@@ -78,6 +78,9 @@ class Variable:
     def sum(self, axis=None, keepdims=False):
         return adfp.matrix_functions.sum(self, axis, keepdims)
 
+    def dot(self, Y):
+        return adfp.matrix_functions.dot(self, Y)
+
     #---- main functions for autodifferentials ----#
     def set_creator(self, func):
         self.creator = func

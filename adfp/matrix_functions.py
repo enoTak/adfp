@@ -108,21 +108,20 @@ def sum_to(x, shape):
 
 class MatMul(Function):
     def forward(self, X, Y):
-        self.X_shape = X.shape
         Z = X.dot(Y)
         return Z
 
     def backward(self, gZ):
         X, Y = self.inputs
-        X = as_matrix(X)
-        Y = as_matrix(Y)
-        gZ = as_matrix(gZ)
-        gX = matmul(gZ, Y.T).reshape(self.X_shape)
+        gX = matmul(gZ, Y.T)
         gY = matmul(X.T, gZ)
         return gX, gY
 
 
 def matmul(X, Y):
+    # numpy magic
+    if isvector(X) or isvector(Y):
+        raise ValueError('shapes {} or {} not accepted in matmul. need to reshape to matrix forms'.format(X.shape, Y.shape))
     return MatMul()(X, Y)
 
 
@@ -141,11 +140,48 @@ def inner_prod(v, w):
     return InnerProd()(v, w)
 
 
+def dot(X, Y):
+    if isscalar(X) or isscalar(Y):
+        return X * Y # applied broadcasting
+    elif isvector(X) and isvector(Y):
+        return inner_prod(X, Y)
+    elif isvector(Y):
+        Y = as_column_vector(Y)
+        v = matmul(X, Y)
+        return v.reshape(v.shape[0])
+    elif isvector(X):
+        X = as_row_vector(X)
+        v = matmul(X, Y)
+        return v.reshape(v.shape[1])
+    return matmul(X, Y)
+
+
+def isvector(x):
+    return len(x.shape) == 1
+
+
+def isscalar(x):
+    return len(x.shape) == 0
+
+
 def as_matrix(v):
-    if len(v.shape) == 0:
+    if isscalar(v):
         return v.reshape(1, 1)
-    elif len(v.shape) == 1:
+    elif isvector(v):
         return v.reshape(1, len(v))
     else:
-        return v
-    
+        return as_variable(v)
+
+
+def as_column_vector(v):
+    if isvector(v):
+        return v.reshape(len(v), 1)
+    else:
+        return as_variable(v)
+
+
+def as_row_vector(v):
+    if isvector(v):
+        return v.reshape(1, len(v))
+    else:
+        return as_variable(v)

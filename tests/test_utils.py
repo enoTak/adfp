@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from adfp import Variable
-from adfp.analytic_function import square
+from adfp.functions.analytic_functions import square
 from adfp.config import no_grad
 
 

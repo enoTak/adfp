@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from adfp import Variable
-import adfp.matrix_functions as F
+import adfp.functions.matrix_functions as F
 from adfp.calc_utils import array_equal
 
 
@@ -49,7 +49,7 @@ class ReshapeTest(unittest.TestCase):
         expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
         self.assertTrue(array_equal(actual, expected))
 
-    def test_scaler(self):
+    def test_scalar(self):
         x = Variable(np.array(2))
         actual = x.reshape(1,1)
         expected = Variable(np.array([[2]]))

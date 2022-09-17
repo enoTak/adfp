@@ -1,7 +1,8 @@
-
 import numpy as np
 from adfp.function import Function
 
+
+__all__ = ['square', 'exp', 'sin', 'cos', 'tanh']
 
 class Square(Function):
     def forward(self, x):

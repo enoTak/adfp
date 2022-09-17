@@ -50,6 +50,12 @@ class ReshapeTest(unittest.TestCase):
         expected = Variable(np.array([[1, 1, 1], [1, 1, 1]]))
         self.assertTrue(array_equal(actual, expected))
 
+    def test_scaler(self):
+        x = Variable(np.array(2))
+        actual = x.reshape(1,1)
+        expected = Variable(np.array([[2]]))
+        self.assertTrue(array_equal(actual, expected))
+
 
 class TransposeTest(unittest.TestCase):
     def test_transpose_value(self):
@@ -314,4 +320,29 @@ class MatMulTest(unittest.TestCase):
 
         actual = x.grad
         expected = Variable(np.array([3, 7, 11]))
+        self.assertTrue(array_equal(actual, expected))
+
+
+class InnerProdTest(unittest.TestCase):
+    def test_value(self):
+        v = Variable(np.array([1, 2, 3]))
+        w = Variable(np.array([2, 3, 4]))
+        y = F.inner_prod(v, w)
+       
+        actual = y
+        expected = Variable(np.array(20))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad(self):
+        v = Variable(np.array([1, 2, 3]))
+        w = Variable(np.array([2, 3, 4]))
+        y = F.inner_prod(v, w)
+        y.backward()
+
+        actual = v.grad
+        expected = w
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = w.grad
+        expected = v
         self.assertTrue(array_equal(actual, expected))

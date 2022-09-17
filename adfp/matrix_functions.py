@@ -114,14 +114,38 @@ class MatMul(Function):
 
     def backward(self, gZ):
         X, Y = self.inputs
-        X_shape = self.X_shape
-        if len(X_shape) == 1:
-            gZ = gZ.reshape((1, len(gZ)))
-            X = X.reshape((1, len(X)))
-        gX = matmul(gZ, Y.T).reshape(X_shape)
+        X = as_matrix(X)
+        Y = as_matrix(Y)
+        gZ = as_matrix(gZ)
+        gX = matmul(gZ, Y.T).reshape(self.X_shape)
         gY = matmul(X.T, gZ)
         return gX, gY
 
 
 def matmul(X, Y):
     return MatMul()(X, Y)
+
+
+class InnerProd(Function):
+    def forward(self, v, w):
+        return v.dot(w)
+
+    def backward(self, gy):
+        # assumed that gy is scalar
+        v, w = self.inputs
+        gv, gw = w * gy, v * gy
+        return gv, gw
+
+
+def inner_prod(v, w):
+    return InnerProd()(v, w)
+
+
+def as_matrix(v):
+    if len(v.shape) == 0:
+        return v.reshape(1, 1)
+    elif len(v.shape) == 1:
+        return v.reshape(1, len(v))
+    else:
+        return v
+    

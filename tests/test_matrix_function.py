@@ -1,4 +1,3 @@
-from cmath import exp
 import unittest
 import numpy as np
 from adfp import Variable
@@ -389,4 +388,23 @@ class DotTest(unittest.TestCase):
 
         actual = y
         expected = Variable(np.dot(v.data, w.data))
+        self.assertTrue(array_equal(actual, expected))
+
+
+class TraceTest(unittest.TestCase):
+    def test_value(self):
+        X = Variable(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+        y = F.trace(X)
+
+        actual = y
+        expected = Variable(np.array(15))
+        self.assertEqual(actual, expected)
+
+    def test_grad(self):
+        X = Variable(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+        y = F.trace(X)
+        y.backward()
+
+        actual = X.grad
+        expected = Variable(np.identity(3))
         self.assertTrue(array_equal(actual, expected))

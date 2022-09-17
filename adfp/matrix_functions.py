@@ -140,6 +140,24 @@ def inner_prod(v, w):
     return InnerProd()(v, w)
 
 
+class Trace(Function):
+    def forward(self, X):
+        self.dim = len(X)
+        return np.trace(X)
+
+    def backward(self, gy):
+        # assumed that gy is scalar
+        return gy * np.identity(self.dim)
+
+
+def trace(X):
+    return Trace()(X)
+
+
+# =============================================================================
+# Utility functions for matrix calculation
+# =============================================================================
+
 def dot(X, Y):
     if isscalar(X) or isscalar(Y):
         return X * Y # applied broadcasting

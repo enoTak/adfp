@@ -1,3 +1,4 @@
+from cmath import exp
 import unittest
 import numpy as np
 from adfp import Variable
@@ -274,4 +275,43 @@ class SumTest(unittest.TestCase):
         y = x.sum()
         actual = y
         expected = Variable(np.array(21))
+        self.assertTrue(array_equal(actual, expected))
+
+
+class MatMulTest(unittest.TestCase):
+    def test_value(self):
+        X = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        Y = Variable(np.array([[1, 2], [3, 4], [5, 6]]))
+        Z = F.matmul(X, Y)
+
+        actual = Z
+        expected = Variable(np.array([[22, 28], [49, 64]]))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_grad(self):
+        X = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
+        Y = Variable(np.array([[1, 2], [3, 4], [5, 6]]))
+        Z = F.matmul(X, Y)
+        Z.backward()
+
+        actual = X.grad
+        expected = Variable(np.ones_like(Z.data).dot(Y.data.T))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = Y.grad
+        expected = Variable(X.data.T.dot(np.ones_like(Z.data)))
+        self.assertTrue(array_equal(actual, expected))
+
+    def test_value_vector(self):
+        x = Variable(np.array([1, 2, 3]))
+        Y = Variable(np.array([[1, 2], [3, 4], [5, 6]]))
+        z = F.matmul(x, Y)
+        z.backward()
+
+        actual = z
+        expected = Variable(np.array([22, 28]))
+        self.assertTrue(array_equal(actual, expected))
+
+        actual = x.grad
+        expected = Variable(np.array([3, 7, 11]))
         self.assertTrue(array_equal(actual, expected))

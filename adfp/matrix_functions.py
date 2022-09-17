@@ -104,3 +104,24 @@ def sum_to(x, shape):
     if x.shape == shape:
         return as_variable(x)
     return SumTo(shape)(x)
+
+
+class MatMul(Function):
+    def forward(self, X, Y):
+        self.X_shape = X.shape
+        Z = X.dot(Y)
+        return Z
+
+    def backward(self, gZ):
+        X, Y = self.inputs
+        X_shape = self.X_shape
+        if len(X_shape) == 1:
+            gZ = gZ.reshape((1, len(gZ)))
+            X = X.reshape((1, len(X)))
+        gX = matmul(gZ, Y.T).reshape(X_shape)
+        gY = matmul(X.T, gZ)
+        return gX, gY
+
+
+def matmul(X, Y):
+    return MatMul()(X, Y)

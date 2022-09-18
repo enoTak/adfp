@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from adfp import Variable
+from adfp.core import Variable
 from adfp.functions.analytic_functions import square
 from adfp.config import no_grad
 

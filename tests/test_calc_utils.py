@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from adfp import Variable
+from adfp.core import Variable
 from adfp.calc_utils import sum_to
 
 class SumToTest(unittest.TestCase):

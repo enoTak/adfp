@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from adfp import Variable
+from adfp.core import Variable
 import adfp.functions.matrix_functions as F
 from adfp.calc_utils import array_equal, allclose
 from adfp.utils import numerical_grad

@@ -87,9 +87,10 @@ class HigherOrderTest(unittest.TestCase):
             Variable(np.array(0.0)),
             Variable(np.array(0.0)),
         ]
-        for i,e in zip(range(2, 5), expected):
+        for e in expected:
             gx = x.grad
             x.cleargrad()
             gx.backward(create_graph=True)
             a = x.grad
+            print
             self.assertEqual(a, e)

@@ -16,4 +16,4 @@ from adfp.utils import get_dot_graph, plot_dot_graph
 
 
 setup_variable()
-__version__ = '0.0.1'
+__version__ = '0.0.2'

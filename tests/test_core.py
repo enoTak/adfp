@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 from adfp.core import Variable
 from adfp.functions.analytic_functions import square
-from adfp.module_config import use_simple_core
 
 
 class CompositeTest(unittest.TestCase):
@@ -76,24 +75,21 @@ class GenerationTest(unittest.TestCase):
 
 class HigherOrderTest(unittest.TestCase):
     def test_higher_order(self):
-        if use_simple_core:
-            pass
-        else:
-            x = Variable(np.array(3.0))
-            y = square(x)
-            y.backward(create_graph=True)
-            actual = x.grad
-            expected = Variable(np.array(6.0))
-            self.assertEqual(actual, expected)
+        x = Variable(np.array(3.0))
+        y = square(x)
+        y.backward(create_graph=True)
+        actual = x.grad
+        expected = Variable(np.array(6.0))
+        self.assertEqual(actual, expected)
 
-            expected = [
-                Variable(np.array(2.0)),
-                Variable(np.array(0.0)),
-                Variable(np.array(0.0)),
-            ]
-            for i,e in zip(range(2, 5), expected):
-                gx = x.grad
-                x.cleargrad()
-                gx.backward(create_graph=True)
-                a = x.grad
-                self.assertEqual(a, e)
+        expected = [
+            Variable(np.array(2.0)),
+            Variable(np.array(0.0)),
+            Variable(np.array(0.0)),
+        ]
+        for i,e in zip(range(2, 5), expected):
+            gx = x.grad
+            x.cleargrad()
+            gx.backward(create_graph=True)
+            a = x.grad
+            self.assertEqual(a, e)

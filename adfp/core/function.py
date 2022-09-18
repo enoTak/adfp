@@ -1,12 +1,7 @@
 import weakref
 import numpy as np
 
-
-from adfp.module_config import use_simple_core
-if use_simple_core:
-    from adfp.core_simple.variable import Variable, as_variable
-else:
-    from adfp.core.variable import Variable, as_variable
+from adfp.core.variable import Variable, as_variable
 from adfp.config import Config
 
 

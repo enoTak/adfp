@@ -1,10 +1,6 @@
 import numpy as np
 
-from adfp.module_config import use_simple_core
-if use_simple_core:
-    from adfp.core_simple.variable import Variable
-else:
-    from adfp.core.variable import Variable
+from adfp.core.variable import Variable
 from adfp.core.function import as_array
 
 

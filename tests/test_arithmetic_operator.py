@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
-from adfp import Variable
-from adfp .calc_utils import array_equal
+from adfp.core import Variable
+from adfp.calc_utils import array_equal
 
 
 class AddTest(unittest.TestCase):

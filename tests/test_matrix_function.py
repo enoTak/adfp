@@ -350,47 +350,110 @@ class DotTest(unittest.TestCase):
         v = Variable(np.array([1., 2., 3.]))
         w = Variable(np.array([2., 3., 4.]))
         y = F.dot(v, w)
+        y.backward()
        
         actual = y
         expected = Variable(np.array(np.dot(v.data, w.data)))
         self.assertEqual(actual, expected)
 
-    def test_scalar_vactor(self):
+        actual = v.grad
+        expected = w
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = v
+        self.assertEqual(actual, expected)
+
+    def test_scalar_vector(self):
         v = Variable(np.array(2.))
         w = Variable(np.array([2., 3., 4.]))
         y = F.dot(v, w)
+        y.backward()
        
         actual = y
         expected = Variable(np.dot(v.data, w.data))
         self.assertEqual(actual, expected)
 
-    def test_scalar_vactor(self):
-        v = Variable(np.array(2.))
-        w = Variable(np.array([2., 3., 4.]))
+        actual = v.grad
+        expected = w.sum()
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = F.broadcast_to(v, w.shape)
+        self.assertEqual(actual, expected)
+
+    def test_vector_scalar(self):
+        v = Variable(np.array([2., 3., 4.]))
+        w = Variable(np.array(2.))
         y = F.dot(v, w)
+        y.backward()
        
         actual = y
         expected = Variable(np.dot(v.data, w.data))
         self.assertEqual(actual, expected)
 
-    def test_matrix_vactor(self):
+        actual = v.grad
+        expected = F.broadcast_to(w, v.shape)
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = v.sum()
+        self.assertEqual(actual, expected)
+
+    def test_matrix_vector(self):
         v = Variable(np.array([[1., 2., 3.], [4., 5., 6.]]))
         w = Variable(np.array([1., 2., 3.]))
         y = F.dot(v, w)
+        y.backward()
        
         actual = y
         expected = Variable(np.dot(v.data, w.data))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = F.broadcast_to(w, v.shape)
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = F.sum_to(v, w.shape)
         self.assertEqual(actual, expected)
 
     def test_vector_matrix(self):
         v = Variable(np.array([1., 2., 3.]))
         w = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
         y = F.dot(v, w)
+        y.backward()
 
         actual = y
         expected = Variable(np.dot(v.data, w.data))
         self.assertEqual(actual, expected)
 
+        actual = v.grad
+        expected = F.sum_to(w.T, v.shape)
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = F.broadcast_to(v.reshape(3, 1), w.shape)
+        self.assertEqual(actual, expected)
+
+    def test_matrix_matrix(self):
+        v = Variable(np.array([[1., 2., 3.], [4., 5., 6.]]))
+        w = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = F.dot(v, w)
+        y.backward()
+
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = F.broadcast_to(F.sum_to(w.T, (1, v.shape[0])), v.shape) 
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = F.broadcast_to(F.sum_to(v.T, (w.shape[1], 1)), w.shape)
+        self.assertEqual(actual, expected)
+        
 
 class TraceTest(unittest.TestCase):
     def test_value(self):
@@ -419,3 +482,123 @@ class TraceTest(unittest.TestCase):
         num_grad = numerical_grad(F.trace, X)
         expected = num_grad
         self.assertTrue(allclose(actual, expected))
+
+
+class LinearTest(unittest.TestCase):
+    def test_vector_vector_coeff(self):
+        v = Variable(np.array([1., 2., 3.]))
+        w = Variable(np.array([2., 3., 4.]))
+        b = Variable(np.array(3))
+        y = F.linear(v, w, b)
+        y.backward()
+       
+        actual = y
+        expected = Variable(np.array(np.dot(v.data, w.data) + b.data))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = w
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = v
+        self.assertEqual(actual, expected)
+
+        actual = b.grad
+        expected = Variable(np.array(1.))
+        self.assertEqual(actual, expected)
+
+    def test_vector_vector_no_coeff(self):
+        v = Variable(np.array([1., 2., 3.]))
+        w = Variable(np.array([2., 3., 4.]))
+        y = F.linear(v, w)
+        y.backward()
+       
+        actual = y
+        expected = Variable(np.array(np.dot(v.data, w.data)))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = w
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = v
+        self.assertEqual(actual, expected)
+
+    def test_vector_vector_none_variable_coeff(self):
+        v = Variable(np.array([1., 2., 3.]))
+        w = Variable(np.array([2., 3., 4.]))
+        b = Variable(None)
+        y = F.linear(v, w)
+        y.backward()
+       
+        actual = y
+        expected = Variable(np.array(np.dot(v.data, w.data)))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = w
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = v
+        self.assertEqual(actual, expected)
+
+        self.assertFalse(b.is_updated_grad)
+
+    def test_scalar_vector(self):
+        v = Variable(np.array(2.))
+        w = Variable(np.array([2., 3., 4.]))
+        b = Variable(np.array([1., 2., 3.]))
+
+        y = F.linear(v, w, b)
+        y.backward()
+       
+        actual = y
+        expected = Variable(np.array(np.dot(v.data, w.data) + b.data))
+        self.assertEqual(actual, expected)
+
+        actual = v.grad
+        expected = w.sum()
+        self.assertEqual(actual, expected)
+
+        actual = w.grad
+        expected = F.broadcast_to(v, w.shape)
+        self.assertEqual(actual, expected)
+
+        actual = b.grad
+        expected = Variable(np.ones_like(b.data))
+        self.assertEqual(actual, expected)
+
+    # def test_matrix_vector(self):
+    #     v = Variable(np.array([[1., 2., 3.], [4., 5., 6.]]))
+    #     w = Variable(np.array([1., 2., 3.]))
+    #     b = Variable(None)
+    #     y = F.linear(v, w, b)
+    #     y.backward()
+       
+    #     actual = y
+    #     expected = Variable(np.dot(v.data, w.data) + b.data)
+    #     self.assertEqual(actual, expected)
+
+    #     actual = v.grad
+    #     expected = w
+    #     self.assertEqual(actual, expected)
+
+    #     actual = w.grad
+    #     expected = v
+    #     self.assertEqual(actual, expected)
+
+        # actual = b.grad
+        # expected = Variable(np.array(1.))
+        # self.assertEqual(actual, expected)
+
+    def test_vector_matrix(self):
+        v = Variable(np.array([1., 2., 3.]))
+        w = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = F.linear(v, w)
+
+        actual = y
+        expected = Variable(np.dot(v.data, w.data))
+        self.assertEqual(actual, expected)

@@ -159,6 +159,24 @@ def trace(X):
     return Trace()(X)
 
 
+class Linear(Function):
+    def forward(self, x, W, b):
+        y = np.dot(x, W)
+        if b is not None:
+            y += b
+        return y
+
+    def backward(self, gy):
+        x, W, b = self.inputs
+        gb = None if b.data is None else sum_to(gy, b.shape)
+        gx = dot(gy, W.T)
+        gW = dot(x.T, gy)
+        return gx, gW, gb
+
+
+def linear(x, W, b=None):
+    return Linear()(x, W, b)
+
 # =============================================================================
 # Utility functions for matrix calculation
 # =============================================================================

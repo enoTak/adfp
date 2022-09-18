@@ -4,6 +4,13 @@ from adfp.core import Variable
 from adfp.functions.analytic_functions import square
 
 
+class NoneInitTest(unittest.TestCase):
+    def test_none(self):
+        x = Variable(None)
+        self.assertTrue(x is not None)
+        self.assertTrue(x.data is None)
+
+        
 class CompositeTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(2.0))

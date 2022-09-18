@@ -1,7 +1,6 @@
 import unittest
 import numpy as np
 from adfp.core import Variable
-from adfp.calc_utils import array_equal
 
 
 class AddTest(unittest.TestCase):
@@ -66,15 +65,15 @@ class AddTest(unittest.TestCase):
 
         actual = y
         expected = Variable(np.array([11, 12, 13]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x0.grad
         expected = Variable(np.array([1, 1, 1]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x1.grad
         expected = Variable(np.array([len(x0)]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
 
 class MulTest(unittest.TestCase):
@@ -139,15 +138,15 @@ class MulTest(unittest.TestCase):
 
         actual = y
         expected = Variable(np.array([10, 20, 30]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x0.grad
         expected = Variable(np.array([10, 10, 10]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x1.grad
         expected = Variable(np.array([6]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
 
 class NegTest(unittest.TestCase):
@@ -211,15 +210,15 @@ class SubTest(unittest.TestCase):
 
         actual = y
         expected = Variable(np.array([-9, -8, -7]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x0.grad
         expected = Variable(np.array([1, 1, 1]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x1.grad
         expected = Variable(np.array([-3]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
 
 class DivTest(unittest.TestCase):
@@ -279,15 +278,15 @@ class DivTest(unittest.TestCase):
 
         actual = y
         expected = Variable(np.array([0.1, 0.2, 0.3]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x0.grad
         expected = Variable(np.array([0.1, 0.1, 0.1]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
         actual = x1.grad
         expected = Variable(np.array([-0.06]))
-        self.assertTrue(array_equal(actual, expected))
+        self.assertEqual(actual, expected)
 
 
 class PowTest(unittest.TestCase):

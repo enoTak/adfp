@@ -1,6 +1,6 @@
 import numpy as np
 
-from adfp.function import Function, as_variable
+from adfp.core.function import Function, as_variable
 import adfp.calc_utils as utils
 
 

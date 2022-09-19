@@ -169,6 +169,13 @@ class Linear(Function):
     def backward(self, gy):
         x, W, b = self.inputs
         gb = None if b.data is None else sum_to(gy, b.shape)
+        if not isvector(x) and isvector(W):
+            W_shape = W.shape
+            W = as_column_vector(W)
+            gy = as_column_vector(gy)
+            gx = dot(gy, W.T).reshape(x.shape)
+            gW = dot(x.T, gy).reshape(W_shape)
+            return gx, gW, gb
         gx = dot(gy, W.T)
         gW = dot(x.T, gy)
         return gx, gW, gb

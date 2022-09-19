@@ -1,7 +1,7 @@
 from adfp.core.variable import Variable
 from adfp.core.arithmetic_operator import setup_variable   
-
 from adfp.core.function import Function
+
 from adfp.calc_utils import numerical_diff, allclose
 from adfp.functions.analytic_functions import *
 from adfp.functions.matrix_functions import *

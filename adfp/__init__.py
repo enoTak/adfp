@@ -9,6 +9,9 @@ from adfp.functions.matrix_functions import *
 from adfp.config import using_config, no_grad
 from adfp.utils import get_dot_graph, plot_dot_graph
 
+from adfp.model.parameter import Parameter
+from adfp.model.layer import Layer
+
 
 setup_variable()
 __version__ = '0.0.2'

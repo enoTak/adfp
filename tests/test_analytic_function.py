@@ -1,21 +1,21 @@
 import unittest
 import numpy as np
 from adfp.core import Variable
-from adfp.functions.analytic_functions import *
+import adfp.functions.analytic_functions as F
 from adfp.calc_utils import numerical_diff, allclose
 
 
 class SquareTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(2.0))
-        y = square(x)
+        y = F.square(x)
         actual = y
         expected = Variable(np.array(4.0))
         self.assertEqual(actual, expected)
 
     def test_backward(self):
         x = Variable(np.array(3.0))
-        y = square(x)
+        y = F.square(x)
         y.backward()
         actual = x.grad
         expected = Variable(np.array(6.0))
@@ -23,9 +23,9 @@ class SquareTest(unittest.TestCase):
 
     def test_gradient_check(self):
         x = Variable(np.random.rand(1))
-        y = square(x)
+        y = F.square(x)
         y.backward()
-        num_grad = numerical_diff(square, x)
+        num_grad = numerical_diff(F.square, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)
 
@@ -33,14 +33,14 @@ class SquareTest(unittest.TestCase):
 class ExpTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(2.0))
-        y = exp(x)
+        y = F.exp(x)
         actual = y
         expected = Variable(np.array(np.exp(2.0)))
         self.assertEqual(actual, expected)
 
     def test_backward(self):
         x = Variable(np.array(3.0))
-        y = exp(x)
+        y = F.exp(x)
         y.backward()
         actual = x.grad
         expected = Variable(np.array(np.exp(3.0)))
@@ -48,9 +48,9 @@ class ExpTest(unittest.TestCase):
 
     def test_gradient_check(self):
         x = Variable(np.random.rand(1))
-        y = exp(x)
+        y = F.exp(x)
         y.backward()
-        num_grad = numerical_diff(exp, x)
+        num_grad = numerical_diff(F.exp, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)
 
@@ -58,14 +58,14 @@ class ExpTest(unittest.TestCase):
 class SinTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(np.pi/4.0))
-        y = sin(x)
+        y = F.sin(x)
         actual = y
         expected =  Variable(np.array(np.sin(np.pi/4.0)))
         self.assertEqual(actual, expected)
 
     def test_backward(self):
         x = Variable(np.array(np.pi/4.0))
-        y = sin(x)
+        y = F.sin(x)
         y.backward()
         actual = x.grad
         expected = Variable(np.array(np.cos(np.pi/4.0)))
@@ -73,9 +73,9 @@ class SinTest(unittest.TestCase):
 
     def test_gradient_check(self):
         x = Variable(np.random.rand(1))
-        y = sin(x)
+        y = F.sin(x)
         y.backward()
-        num_grad = numerical_diff(sin, x)
+        num_grad = numerical_diff(F.sin, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)
 
@@ -83,14 +83,14 @@ class SinTest(unittest.TestCase):
 class CosTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(np.pi/4.0))
-        y = cos(x)
+        y = F.cos(x)
         actual = y
         expected = Variable(np.array(np.cos(np.pi/4.0)))
         self.assertEqual(actual, expected)
 
     def test_backward(self):
         x = Variable(np.array(np.pi/4.0))
-        y = cos(x)
+        y = F.cos(x)
         y.backward()
         actual = x.grad
         expected = Variable(np.array(-np.sin(np.pi/4.0)))
@@ -98,9 +98,9 @@ class CosTest(unittest.TestCase):
 
     def test_gradient_check(self):
         x = Variable(np.random.rand(1))
-        y = cos(x)
+        y = F.cos(x)
         y.backward()
-        num_grad = numerical_diff(cos, x)
+        num_grad = numerical_diff(F.cos, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)
 
@@ -108,14 +108,14 @@ class CosTest(unittest.TestCase):
 class TanhTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(1.0))
-        y = tanh(x)
+        y = F.tanh(x)
         actual = y
         expected = Variable(np.array(np.tanh(1.0)))
         self.assertEqual(actual, expected)
 
     def test_backward(self):
         x = Variable(np.array(1.0))
-        y = tanh(x)
+        y = F.tanh(x)
         y.backward()
         actual = x.grad
         expected = 1 - y * y
@@ -123,8 +123,34 @@ class TanhTest(unittest.TestCase):
 
     def test_gradient_check(self):
         x = Variable(np.random.rand(1))
-        y = tanh(x)
+        y = F.tanh(x)
         y.backward()
-        num_grad = numerical_diff(tanh, x)
+        num_grad = numerical_diff(F.tanh, x)
+        flg = allclose(x.grad, num_grad)
+        self.assertTrue(flg)
+
+
+class SigmoidTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(2.0))
+        y = F.sigmoid(x)
+        actual = y
+        expected = Variable(np.array(1 / (1 + np.exp(-2.0))))
+        self.assertEqual(actual, expected)
+
+    def test_backward(self):
+        x = Variable(np.array(2.0))
+        y = F.sigmoid(x)
+        y.backward()
+        actual = x.grad
+        z = np.exp(-2.0)
+        expected = Variable(np.array(z / (1 + z) ** 2))
+        self.assertEqual(actual, expected)
+
+    def test_gradient_check(self):
+        x = Variable(np.random.rand(1))
+        y = F.sigmoid(x)
+        y.backward()
+        num_grad = numerical_diff(F.sigmoid, x)
         flg = allclose(x.grad, num_grad)
         self.assertTrue(flg)

@@ -2,7 +2,7 @@ import numpy as np
 from adfp.core.function import Function
 
 
-__all__ = ['square', 'exp', 'sin', 'cos', 'tanh']
+__all__ = ['square', 'exp', 'sin', 'cos', 'tanh', 'sigmoid']
 
 
 class Square(Function):
@@ -72,3 +72,19 @@ class Tanh(Function):
 
 def tanh(x):
     return Tanh()(x)
+
+
+class Sigmoid(Function):
+    def forward(self, x):
+        self.z = np.exp(-x)
+        y = 1 / (1 + self.z)
+        return y
+
+    def backward(self, gy):
+        z = self.z
+        gx = gy * z / ((1 + z) ** 2)
+        return gx
+
+
+def sigmoid(x):
+    return Sigmoid()(x)

@@ -19,9 +19,13 @@ class Variable:
         self.generation = 0
 
     def __eq__(self, other):
+        if np.isscalar(self.data) and np.isscalar(other.data):
+            return self.data == other.data 
         return np.array_equal(self.data, other.data)
         
     def __ne__(self, other):
+        if np.isscalar(self.data) and np.isscalar(other.data):
+            return self.data != other.data 
         return not np.array_equal(self.data, other.data)
 
     #---- utility functions ----#

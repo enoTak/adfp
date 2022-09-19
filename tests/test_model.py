@@ -1,8 +1,10 @@
 import unittest
 import numpy as np
 from adfp.core import Variable
+import adfp.functions as F
 from adfp.model.parameter import Parameter
 from adfp.model.layer import Layer
+from adfp.model.layers.linear import Linear
 
 
 class ParameterTest(unittest.TestCase):
@@ -33,3 +35,27 @@ class LayerTest(unittest.TestCase):
         actual = layer._params
         expected = set(['p1', 'p2'])
         self.assertEqual(actual, expected)
+
+class LinearLayerTest(unittest.TestCase):
+    def test_forward(self):
+        O = 4
+        l = Linear(O)
+        I = 3
+        x = np.random.rand(I, 1)
+        y = l(x)
+        y.backward()
+
+        actual_val = y
+        actual_grad_W = l.W.grad
+        actual_grad_b = l.b.grad
+        
+        # check the access to same W and b
+        z = F.dot(x, l.W) + l.b
+        z.backward()
+        expected_val = z
+        expected_grad_W = 0.5 * l.W.grad
+        expected_grad_b = 0.5 * l.b.grad
+        
+        self.assertEqual(actual_val, expected_val)
+        self.assertEqual(actual_grad_W, expected_grad_W)
+        self.assertEqual(actual_grad_b, expected_grad_b)

@@ -6,7 +6,7 @@ import adfp.calc_utils as utils
 
 __all__ = ['reshape', 'transpose', 'sum', 
            'broadcast_to', 'sum_to', 'matmul', 'inner_prod',
-           'trace', 'dot']
+           'trace', 'linear', 'dot']
 
 
 class Reshape(Function):
@@ -175,6 +175,13 @@ class Linear(Function):
             gy = as_column_vector(gy)
             gx = dot(gy, W.T).reshape(x.shape)
             gW = dot(x.T, gy).reshape(W_shape)
+            return gx, gW, gb
+        if isvector(x) and not isvector(W):
+            x_shape = x.shape
+            x = as_row_vector(x)
+            gy = as_row_vector(gy)
+            gx = dot(gy, W.T).reshape(x_shape)
+            gW = dot(x.T, gy).reshape(W.shape)
             return gx, gW, gb
         gx = dot(gy, W.T)
         gW = dot(x.T, gy)

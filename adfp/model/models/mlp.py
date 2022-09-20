@@ -11,7 +11,7 @@ class TwoLayerNet(Model):
 
     def forward(self, x):
         y = F.sigmoid(self.l1(x))
-        y = self.l2(x)
+        y = self.l2(y)
         return y
 
 
@@ -26,7 +26,7 @@ class MLP(Model):
             setattr(self, 'l' + str(i), layer)
             self.layers.append(layer)
 
-    def fowward(self, x):
+    def forward(self, x):
         for l in self.layers[:-1]:
             x = self.acticavation(l(x))
         return self.layers[-1](x)

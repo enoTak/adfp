@@ -36,6 +36,23 @@ class LayerTest(unittest.TestCase):
         expected = set(['p1', 'p2'])
         self.assertEqual(actual, expected)
 
+    def test_multi_layers(self):
+        l = Layer()
+
+        p1 = Parameter(np.array(1.0))
+        p2 = Parameter(np.array(2.0))
+        l.p1 = p1
+        l.p2 = p2
+        
+        ml = Layer()
+        ml.l = l
+        p = Parameter(np.array(3.0))
+        ml.p = p
+
+        actual = [p for p in ml.params]
+        self.assertEqual(len(actual), 3)
+
+
 class LinearLayerTest(unittest.TestCase):
     def test_forward(self):
         O = 4

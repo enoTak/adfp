@@ -76,13 +76,13 @@ def tanh(x):
 
 class Sigmoid(Function):
     def forward(self, x):
-        self.z = np.exp(-x)
-        y = 1 / (1 + self.z)
+        y = 1 / (1 + np.exp(-x))
         return y
 
     def backward(self, gy):
-        z = self.z
-        gx = gy * z / ((1 + z) ** 2)
+        y, = self.outputs
+        y = y()
+        gx = gy * y * (1 - y)
         return gx
 
 

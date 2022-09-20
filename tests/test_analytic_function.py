@@ -143,8 +143,7 @@ class SigmoidTest(unittest.TestCase):
         y = F.sigmoid(x)
         y.backward()
         actual = x.grad
-        z = np.exp(-2.0)
-        expected = Variable(np.array(z / (1 + z) ** 2))
+        expected = Variable(np.array(y.data * (1 - y.data)))
         self.assertEqual(actual, expected)
 
     def test_gradient_check(self):

@@ -12,8 +12,8 @@ class Add(Function):
     def backward(self, gy):
         gx0, gx1 = gy, gy
         if self.x0_shape != self.x1_shape:
-            gx0 = adfp.functions.matrix_functions.sum_to(gx0, self.x0_shape)
-            gx1 = adfp.functions.matrix_functions.sum_to(gx1, self.x1_shape)
+            gx0 = adfp.functions.matrix.sum_to(gx0, self.x0_shape)
+            gx1 = adfp.functions.matrix.sum_to(gx1, self.x1_shape)
         return gx0, gx1
         
 
@@ -43,8 +43,8 @@ class Sub(Function):
     def backward(self, gy):
         gx0, gx1 = gy, -gy
         if self.x0_shape != self.x1_shape:
-            gx0 = adfp.functions.matrix_functions.sum_to(gx0, self.x0_shape)
-            gx1 = adfp.functions.matrix_functions.sum_to(gx1, self.x1_shape)
+            gx0 = adfp.functions.matrix.sum_to(gx0, self.x0_shape)
+            gx1 = adfp.functions.matrix.sum_to(gx1, self.x1_shape)
         return gx0, gx1
         
 
@@ -68,8 +68,8 @@ class Mul(Function):
         x0, x1 = self.inputs
         gx0, gx1 = gy * x1, gy * x0
         if self.x0_shape != self.x1_shape:
-            gx0 = adfp.functions.matrix_functions.sum_to(gx0, self.x0_shape)
-            gx1 = adfp.functions.matrix_functions.sum_to(gx1, self.x1_shape)
+            gx0 = adfp.functions.matrix.sum_to(gx0, self.x0_shape)
+            gx1 = adfp.functions.matrix.sum_to(gx1, self.x1_shape)
         return gx0, gx1
 
 
@@ -90,8 +90,8 @@ class Div(Function):
         gx0 = gy / x1
         gx1 = gy * (-x0 / x1 ** 2)
         if self.x0_shape != self.x1_shape:
-            gx0 = adfp.functions.matrix_functions.sum_to(gx0, self.x0_shape)
-            gx1 = adfp.functions.matrix_functions.sum_to(gx1, self.x1_shape)
+            gx0 = adfp.functions.matrix.sum_to(gx0, self.x0_shape)
+            gx1 = adfp.functions.matrix.sum_to(gx1, self.x1_shape)
         return gx0, gx1
         
 

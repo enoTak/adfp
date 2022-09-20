@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from adfp.core import Variable
-import adfp.functions.analytic_functions as F
+import adfp.functions.analytic as F
 from adfp.calc_utils import numerical_diff, allclose
 
 

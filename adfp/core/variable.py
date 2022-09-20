@@ -65,7 +65,7 @@ class Variable:
     def reshape(self, *shape):
         if len(shape) == 1 and isinstance(shape[0], (tuple, list)):
             shape = shape[0]
-        return adfp.functions.matrix_functions.reshape(self, shape)
+        return adfp.functions.matrix.reshape(self, shape)
 
     def transpose(self, *axes):
         if len(axes) == 0:
@@ -73,17 +73,17 @@ class Variable:
         elif len(axes) == 1:
             if isinstance(axes[0], (tuple, list)) or axes[0] is None:
                 axes = axes[0]
-        return adfp.functions.matrix_functions.transpose(self, axes)
+        return adfp.functions.matrix.transpose(self, axes)
 
     @property
     def T(self):
-        return adfp.functions.matrix_functions.transpose(self)
+        return adfp.functions.matrix.transpose(self)
 
     def sum(self, axis=None, keepdims=False):
-        return adfp.functions.matrix_functions.sum(self, axis, keepdims)
+        return adfp.functions.matrix.sum(self, axis, keepdims)
 
     def dot(self, Y):
-        return adfp.functions.matrix_functions.dot(self, Y)
+        return adfp.functions.matrix.dot(self, Y)
 
     #---- main functions for autodifferentials ----#
     def set_creator(self, func):

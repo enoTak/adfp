@@ -1,2 +1,2 @@
-from adfp.functions.analytic_functions import *
-from adfp.functions.matrix_functions import *
+from adfp.functions.analytic import *
+from adfp.functions.matrix import *

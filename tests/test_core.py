@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from adfp.core import Variable
-from adfp.functions.analytic_functions import square
+from adfp.functions.analytic import square
 
 
 class NoneInitTest(unittest.TestCase):

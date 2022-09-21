@@ -2,7 +2,8 @@ import numpy as np
 from adfp.core.function import Function
 
 
-__all__ = ['square', 'exp', 'sin', 'cos', 'tanh', 'sigmoid']
+__all__ = ['square', 'exp', 'log',
+           'sin', 'cos', 'tanh', 'sigmoid']
 
 
 class Square(Function):
@@ -22,6 +23,7 @@ def square(x):
 class Exp(Function):
     def forward(self, x):
         return np.exp(x)
+
     def backward(self, gy):
         x, = self.inputs
         gx = exp(x) * gy
@@ -32,9 +34,23 @@ def exp(x):
     return Exp()(x)
 
 
+class Log(Function):
+    def forward(self, x):
+        return np.log(x)
+    
+    def backward(self, gy):
+        x, = self.inputs
+        gx = gy / x
+        return gx
+
+def log(x):
+    return Log()(x)
+
+
 class Sin(Function):
     def forward(self, x):
         return np.sin(x)
+
     def backward(self, gy):
         x, = self.inputs
         gx = gy * cos(x)
@@ -48,6 +64,7 @@ def sin(x):
 class Cos(Function):
     def forward(self, x):
         return np.cos(x)
+
     def backward(self, gy):
         x, = self.inputs
         gx = gy * -sin(x)

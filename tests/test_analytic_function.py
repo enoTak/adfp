@@ -55,6 +55,31 @@ class ExpTest(unittest.TestCase):
         self.assertTrue(flg)
 
 
+class LogTest(unittest.TestCase):
+    def test_forward(self):
+        x = Variable(np.array(2.0))
+        y = F.log(x)
+        actual = y
+        expected = Variable(np.array(np.log(2.0)))
+        self.assertEqual(actual, expected)
+
+    def test_backward(self):
+        x = Variable(np.array(4.0))
+        y = F.log(x)
+        y.backward()
+        actual = x.grad
+        expected = Variable(np.array(0.25))
+        self.assertEqual(actual, expected)
+
+    def test_gradient_check(self):
+        x = Variable(np.random.rand(1) + 0.1)
+        y = F.log(x)
+        y.backward()
+        num_grad = numerical_diff(F.log, x)
+        flg = allclose(x.grad, num_grad)
+        self.assertTrue(flg)
+
+
 class SinTest(unittest.TestCase):
     def test_forward(self):
         x = Variable(np.array(np.pi/4.0))

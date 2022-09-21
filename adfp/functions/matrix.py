@@ -6,7 +6,8 @@ import adfp.calc_utils as utils
 
 __all__ = ['reshape', 'transpose', 'sum', 
            'broadcast_to', 'sum_to', 'matmul', 'inner_prod',
-           'trace', 'linear', 'dot']
+           'trace', 'linear', 'dot',
+           'get_item']
 
 
 class Reshape(Function):
@@ -190,6 +191,39 @@ class Linear(Function):
 
 def linear(x, W, b=None):
     return Linear()(x, W, b)
+
+
+class GetItem(Function):
+    def __init__(self, slices):
+        self.slices = slices
+
+    def forward(self, x):
+        y = x[self.slices]
+        return y
+
+    def backward(self, gy):
+        x, = self.inputs
+        f = GetItemGrad(self.slices, x.shape)
+        return f(gy)
+
+
+def get_item(x, slices):
+    return GetItem(slices)(x)
+
+
+class GetItemGrad(Function):
+    def __init__(self, slices, in_shape):
+        self.slices = slices
+        self.in_shape = in_shape
+
+    def forward(self, gy):
+        gx = np.zeros(self.in_shape)
+        np.add.at(gx, self.slices, gy)
+        return gy
+
+    def backward(self, ggx):
+        return get_item(ggx, self.sllices)
+
 
 # =============================================================================
 # Utility functions for matrix calculation

@@ -615,3 +615,29 @@ class LinearTest(unittest.TestCase):
         actual = b.grad
         expected = Variable(np.ones_like(b.data))
         self.assertEqual(actual, expected)
+
+
+class GetItemTest(unittest.TestCase):
+    def test_single_row(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = F.get_item(x, 1)
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([3., 4.]))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[0., 0.], [1., 1.], [0., 0.]]))
+
+    def test_multi_row(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = F.get_item(x, [0, 1, 0])
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([[1., 2.], [3., 4.], [1., 2.]]))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[2., 2.], [1., 1.], [0., 0.]]))

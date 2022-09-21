@@ -10,7 +10,7 @@ from adfp.config import using_config, no_grad
 from adfp.utils import get_dot_graph, plot_dot_graph
 
 from adfp.model.parameter import Parameter
-from adfp.model.layer import Layer
+from adfp.model.model import Model
 
 
 setup_variable()

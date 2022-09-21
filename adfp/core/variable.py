@@ -38,6 +38,10 @@ class Variable:
         return self.data.size
 
     @property
+    def ndim(self):
+        return self.data.ndim
+
+    @property
     def dtype(self):
         return self.data.dtype
 

@@ -1,10 +1,12 @@
 import unittest
 import numpy as np
+
 from adfp.core import Variable
 import adfp.functions as F
 from adfp.model.parameter import Parameter
 from adfp.model.layer import Layer
 from adfp.model.layers.linear import Linear
+from adfp.model.target_func import TargetFunc
 
 
 class ParameterTest(unittest.TestCase):
@@ -76,3 +78,39 @@ class LinearLayerTest(unittest.TestCase):
         self.assertEqual(actual_val, expected_val)
         self.assertEqual(actual_grad_W, expected_grad_W)
         self.assertEqual(actual_grad_b, expected_grad_b)
+
+
+class TargetFuncTest(unittest.TestCase):
+    def test_call(self):
+        init_x0 = 1.0
+        init_x1 = 2.0
+        
+        def quad(x0, x1):
+            return 2 * x0 ** 2 + x1 ** 2
+
+        target = TargetFunc(quad, init_x0, init_x1)
+        y = target()
+        target.cleargrads()
+        y.backward()
+        x0 = target.arg0
+        x1 = target.arg1
+
+        actual = x0
+        expected = Variable(np.array(1.0))
+        self.assertEqual(actual, expected)
+
+        actual = x1
+        expected = Variable(np.array(2.0))
+        self.assertEqual(actual, expected)
+
+        actual = y
+        expected = Variable(np.array(6.0))
+        self.assertEqual(actual, expected)
+    
+        actual = x0.grad
+        expected = Variable(np.array(4.0))
+        self.assertEqual(actual, expected)
+
+        actual = x1.grad
+        expected = Variable(np.array(4.0))
+        self.assertEqual(actual, expected)

@@ -8,7 +8,7 @@ class Optimizer:
         return self
 
     def update(self):
-        params = [p for p in self.target.params if not p.is_updated_grad]
+        params = [p for p in self.target.params if p.is_updated_grad]
 
         for f in self.hooks:
             f(params)

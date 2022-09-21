@@ -641,3 +641,53 @@ class GetItemTest(unittest.TestCase):
 
         actual = x.grad
         expected = Variable(np.array([[2., 2.], [1., 1.], [0., 0.]]))
+
+
+class SliceTest(unittest.TestCase):
+    def test_single_row(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = x[1]
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([3., 4.]))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[0., 0.], [1., 1.], [0., 0.]]))
+
+    def test_multi_row(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = x[[0, 1, 0]]
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([[1., 2.], [3., 4.], [1., 2.]]))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[2., 2.], [1., 1.], [0., 0.]]))
+
+    def test_single_column(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = x[:,1]
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array([2., 4., 6.]))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[0., 1.], [0., 1.], [0., 1.]]))
+
+    def test_single_element(self):
+        x = Variable(np.array([[1., 2.], [3., 4.], [5., 6.]]))
+        y = x[2,0]
+        y.backward()
+
+        actual = y
+        expected = Variable(np.array(5.))
+        self.assertEqual(actual, expected)
+
+        actual = x.grad
+        expected = Variable(np.array([[0., 0.], [0., 0.], [1., 0.]]))

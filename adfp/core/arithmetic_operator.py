@@ -3,6 +3,20 @@ from adfp.core.variable import Variable
 from adfp.core.function import Function, as_array
 
 
+
+def setup_variable():
+    Variable.__neg__ = neg
+    Variable.__add__ = add
+    Variable.__radd__ = add
+    Variable.__sub__ = sub
+    Variable.__rsub__ = rsub
+    Variable.__mul__ = mul
+    Variable.__rmul__ = mul
+    Variable.__truediv__ = div
+    Variable.__rtruediv__ = rdiv
+    Variable.__pow__ = pow
+
+
 class Add(Function):
     def forward(self, x0, x1):
         self.x0_shape, self.x1_shape  = x0.shape, x1.shape
@@ -122,16 +136,3 @@ class Pow(Function):
 
 def pow(x, c):
     return Pow(c)(x)
-
-
-def setup_variable():
-    Variable.__neg__ = neg
-    Variable.__add__ = add
-    Variable.__radd__ = add
-    Variable.__sub__ = sub
-    Variable.__rsub__ = rsub
-    Variable.__mul__ = mul
-    Variable.__rmul__ = mul
-    Variable.__truediv__ = div
-    Variable.__rtruediv__ = rdiv
-    Variable.__pow__ = pow

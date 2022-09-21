@@ -1,5 +1,6 @@
 import numpy as np
 
+from adfp.core.variable import Variable
 from adfp.core.function import Function, as_variable
 import adfp.calc_utils as utils
 
@@ -8,6 +9,10 @@ __all__ = ['reshape', 'transpose', 'sum',
            'broadcast_to', 'sum_to', 'matmul', 'inner_prod',
            'trace', 'linear', 'dot',
            'get_item']
+
+
+def setup_variable():
+    Variable.__getitem__ = get_item
 
 
 class Reshape(Function):
